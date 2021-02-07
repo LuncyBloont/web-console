@@ -1,18 +1,28 @@
 class ConsoleForUser {
     constructor(ps1, endl, space, blink) {
+        /*
+        ps1: the shell's variable PS1, show at the start of the line user inputting.
+        endl: the line break string. '\n' for textarea; '<br />' for div.
+        space: the space string. ' ' for textarea; '&nbsp;' for div.
+        blink: the time between cursor blinks.
+        */
         this.ps1 = ps1 || ">> ";
         this.endl = endl || "<br />";
         this.blink = blink || 500;
         this.space = space || "&nbsp;";
-        this.history = "Hello! jser." + this.endl;
-        this.history_cmd = [""];
-        this.history_index = 0;
-        this.message = "";
-        this.editing = "";
-        this.cursor = 0;
+
+        this.history = "Hello! jser." + this.endl; // whole history message. 
+        this.history_cmd = [""]; // commands history
+        this.history_index = 0; // the index of commands history when choosing them.
+        this.message = ""; // message shown under cursor.
+        this.editing = ""; // the typing command.
+        this.cursor = 0; // the cursor position.
         this.cursor_char = '_';
-        this.shift_mode = false;
+        this.shift_mode = false; // is shift down
+
+        // Override{
         this.help_string = "help\n  JS Console\n  By Yuanivr\n  Undefined running\n";
+        // }
 
         this.K_BACKSPACE = 8;
         this.K_ENTER = 13;
@@ -118,6 +128,7 @@ class ConsoleForUser {
         }
     }
 
+    // Override {
     run(cmd) {
         if (cmd == "help") {
             this.help();
@@ -130,6 +141,7 @@ class ConsoleForUser {
         this.out("(?)");
         return cmd + "... can't run as undefined action" + this.endl;
     }
+    // }
 
     enter() {
         var runable = false;
