@@ -32,7 +32,6 @@ cmd.super_run = cmd.run;
 cmd.run = function(cmd) {
     var sr = this.super_run(cmd);
     var cmds = (cmd + "").split(" ");
-    this.out("");
     if (cmds[0] == "echo") {
         var s = cmd.substring(cmd.indexOf("echo") + 5, cmd.length);
         try {
@@ -42,11 +41,12 @@ cmd.run = function(cmd) {
             }
             s = eval(s);
         } catch {
-            this.out("(x)");
-            return this.getString("string should be included by \"\" ...\n");
+            this.print(this.getString("string should be included by \"\" ..."));
+            return "(x)"
         }
         s = this.getString(s);
-        return s;
+        this.print(s, true);
+        return "(OK)";
     }
     if (cmds[0] == "run") {
         var s = cmd.substring(cmd.indexOf("run") + 4, cmd.length);
@@ -58,11 +58,12 @@ cmd.run = function(cmd) {
             s = eval(s);
             s = eval(s);
         } catch {
-            this.out("(x)");
-            return this.getString("code should be included by \"\" ...\n");
+            this.print(this.getString("code should be included by \"\" ..."));
+            return "(x)";
         }
         s = this.getString(s) + this.endl;
-        return s;
+        this.print(s);
+        return "(OK)";
     }
     if (cmds[0] == "alert") {
         var s = cmd.substring(cmd.indexOf("alert") + 6, cmd.length);
@@ -74,13 +75,12 @@ cmd.run = function(cmd) {
             s = eval(s);
             alert(s);
         } catch {
-            this.out("(x)");
-            return this.getString("code should be included by \"\" ...\n");
+            this.print(this.getString("string should be included by \"\" ..."));
+            return "(x)";
         }
-        return "";
+        return "(OK)";
     }
-    this.out("(?)");
-    return sr;
+    return sr == true ? true : "(?)";
 };
 
 function update() {

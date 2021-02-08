@@ -58,7 +58,7 @@ basic command:\n\
         
         s = this.getString(s) + this.endl;
         
-        this.out(s);
+        return s;
     }
 
     input(code) {
@@ -135,24 +135,26 @@ basic command:\n\
         }
     }
 
+    print(s, noendl) {
+        this.history += s + (noendl ? "" : this.endl);
+    }
+
     // Override {
     run(cmd) {
         cmd = (cmd + "").split(" ");
         if (cmd[0] == "help") {
-            this.help();
-            return false;
+            this.print(this.help());
+            return true;
         }
         if (cmd[0] == "exit") {
-            this.out("web page cant quit...");
-            return false;
+            this.print("web page cant quit...");
+            return true;
         }
         if (cmd[0] == "clear") {
             this.history = "";
-            this.out("");
-            return false;
+            return true;
         }
-        this.out("(?)");
-        return cmd + "... can't run as undefined action" + this.endl;
+        return "(?)";
     }
     // }
 
@@ -177,8 +179,12 @@ basic command:\n\
         }
         
         this.history += this.ps1 + this.editing + this.endl;
-        var result = (runable ? (this.run(this.editing) || "") : "");
-        this.history += result;
+        var result = this.run(this.editing);
+        if (result == true || !runable) {
+            this.out("");
+        } else {
+            this.out(result);
+        }
 
         this.editing = "";
 
