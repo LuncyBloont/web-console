@@ -135,6 +135,10 @@ basic command:\n\
         }
     }
 
+    get_in(s) {
+        
+    }
+
     print(s, noendl) {
         this.history += s + (noendl ? "" : this.endl);
     }
