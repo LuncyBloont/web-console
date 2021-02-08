@@ -9,9 +9,13 @@ class ConsoleForUser {
         this.ps1 = ps1 || ">> ";
         this.endl = endl || "<br />";
         this.blink = blink || 500;
-        this.space = space || "&nbsp;";
+        this.space = space || "&ensp;";
 
-        this.history = "Hello! jser." + this.endl; // whole history message. 
+        this.scode = ["&lt;", "&gt;"];
+        this.max_history = 10000;
+        this.max_history_cmd = 20;
+
+        this.history = "Hello! jser. input \"help\" to show more help." + this.endl; // whole history message. 
         this.history_cmd = [""]; // commands history
         this.history_index = 0; // the index of commands history when choosing them.
         this.message = ""; // message shown under cursor.
@@ -21,7 +25,10 @@ class ConsoleForUser {
         this.shift_mode = false; // is shift down
 
         // Override{
-        this.help_string = "help\n  JS Console\n  By Yuanivr\n  Undefined running\n";
+        this.help_string = "help\n  JS Console\n  By LuncyBloont\n  Undefined running\n\
+basic command:\n\
+  clear        clean the console.\n\
+  help         show help doc.\n";
         // }
 
         this.K_BACKSPACE = 8;
@@ -48,8 +55,8 @@ class ConsoleForUser {
 
     help() {
         var s = this.help_string;
-        s = s.replace(/[ ]/g, this.space);
-        s = s.replace(/\n/g, this.endl) + this.endl;
+        
+        s = this.getString(s) + this.endl;
         
         this.out(s);
     }
@@ -120,7 +127,7 @@ class ConsoleForUser {
                     chr = " ";
                 } else {
                     chr = !this.shift_mode ? this.sign.charAt(code - this.sign_start) : this.sign_shift.charAt(code - this.sign_start);
-                    this.out(code);
+                    // this.out(code);
                 }
                 this.editing = this.editing.substring(0, this.cursor) + chr
                     + this.editing.substring(this.cursor, this.editing.length);
@@ -130,18 +137,34 @@ class ConsoleForUser {
 
     // Override {
     run(cmd) {
-        if (cmd == "help") {
+        cmd = (cmd + "").split(" ");
+        if (cmd[0] == "help") {
             this.help();
-            return "";
+            return false;
         }
-        if (cmd == "exit") {
+        if (cmd[0] == "exit") {
             this.out("web page cant quit...");
-            return "";
+            return false;
+        }
+        if (cmd[0] == "clear") {
+            this.history = "";
+            this.out("");
+            return false;
         }
         this.out("(?)");
         return cmd + "... can't run as undefined action" + this.endl;
     }
     // }
+
+    getString(s) {
+        s = s || "";
+        s = s.replace(/[ ]/g, this.space);
+        s = s.replace(/[<]/g, this.scode[0]);
+        s = s.replace(/[>]/g, this.scode[1]);
+
+        s = s.replace(/\n/g, this.endl);
+        return s;
+    }
 
     enter() {
         var runable = false;
@@ -152,8 +175,24 @@ class ConsoleForUser {
         } else {
             this.out("");
         }
-        this.history += this.ps1 + this.editing + this.endl + (runable ? this.run(this.editing) : "");
+        
+        this.history += this.ps1 + this.editing + this.endl;
+        var result = (runable ? (this.run(this.editing) || "") : "");
+        this.history += result;
+
         this.editing = "";
+
+        if (this.history.length > this.max_history) {
+            this.history = this.history.substring(this.history.length - this.max_history, this.history.length);
+        }
+        if (this.history_cmd.length > this.max_history_cmd) {
+            this.history_index -= 1;
+            var nh = [];
+            for (var i = 1; i < this.history_cmd.length; i++) {
+                nh[i - 1] = this.history_cmd[i];
+            }
+            this.history_cmd = nh;
+        }
     }
 
     toShow() {

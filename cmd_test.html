@@ -3,11 +3,11 @@
 <head>
     <script src="js/console.js"></script>
     <script>
-cmd = new ConsoleForUser("$ ");
+cmd = new ConsoleForUser("@ ");
     </script>
 </head>
 <body>
-    <div rows="40" id="tx" style="font-family: monospace ;width: 100%; height: 100%;"></div>
+    <div rows="40" id="tx" style="width: 95% ; font-size: 16pt; padding: 0.5cm; font-family: 'Courier New', Courier, monospace;"></div>
     <script>
 document.body.onkeydown = function(e) {
     var event = e || event || window.event;
@@ -23,9 +23,69 @@ document.body.onkeyup = function() {
     cmd.shift_test_up(event.keyCode);
 };
 
+cmd.help_string += "\nDemo help:\n\
+  echo \"<string>\"            print message on console.\n\
+  run \"[code]\"               run js code in this page.\n\
+  alert \"<string>\"           alert message use browser alert components.\n\
+  help                       show help doc.\n";
+cmd.super_run = cmd.run;
+cmd.run = function(cmd) {
+    var sr = this.super_run(cmd);
+    var cmds = (cmd + "").split(" ");
+    this.out("");
+    if (cmds[0] == "echo") {
+        var s = cmd.substring(cmd.indexOf("echo") + 5, cmd.length);
+        try {
+            if (s.indexOf("\"") < 0) {
+                var a = undefined;
+                a.replace();
+            }
+            s = eval(s);
+        } catch {
+            this.out("(x)");
+            return this.getString("string should be included by \"\" ...\n");
+        }
+        s = this.getString(s);
+        return s;
+    }
+    if (cmds[0] == "run") {
+        var s = cmd.substring(cmd.indexOf("run") + 4, cmd.length);
+        try {
+            if (s.indexOf("\"") < 0) {
+                var a = undefined;
+                a.replace();
+            }
+            s = eval(s);
+            s = eval(s);
+        } catch {
+            this.out("(x)");
+            return this.getString("code should be included by \"\" ...\n");
+        }
+        s = this.getString(s) + this.endl;
+        return s;
+    }
+    if (cmds[0] == "alert") {
+        var s = cmd.substring(cmd.indexOf("alert") + 6, cmd.length);
+        try {
+            if (s.indexOf("\"") < 0) {
+                var a = undefined;
+                a.replace();
+            }
+            s = eval(s);
+            alert(s);
+        } catch {
+            this.out("(x)");
+            return this.getString("code should be included by \"\" ...\n");
+        }
+        return "";
+    }
+    this.out("(?)");
+    return sr;
+};
 
 function update() {
     document.getElementById("tx").innerHTML = cmd.toShow();
+    document.getElementById("tx").scrollIntoView(false);
 }
 
 setInterval(update, 10);
