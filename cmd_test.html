@@ -7,7 +7,9 @@ cmd = new ConsoleForUser("@ ");
     </script>
 </head>
 <body>
-    <div rows="40" id="tx" style="width: 95% ; font-size: 16pt; padding: 0.5cm; font-family: 'Courier New', Courier, monospace;"></div>
+    <pre>
+        <div rows="40" id="tx" style="width: 95% ; font-size: 16pt; padding: 0.5cm; font-family: 'Courier New', Courier, monospace;"></div>
+    </pre>
     <script>
 document.body.onkeydown = function(e) {
     var event = e || event || window.event;
@@ -24,10 +26,10 @@ document.body.onkeyup = function() {
 };
 
 cmd.help_string += "\nDemo help:\n\
-  echo \"<string>\"            print message on console.\n\
-  run \"[code]\"               run js code in this page.\n\
-  alert \"<string>\"           alert message use browser alert components.\n\
-  help                       show help doc.\n";
+  echo \"<string>\"            \tprint message on console.\n\
+  run \"[code]\"               \trun js code in this page.\n\
+  alert \"<string>\"           \talert message use browser alert components.\n\
+  help                         \tshow help doc.\n";
 cmd.super_run = cmd.run;
 cmd.run = function(cmd) {
     var sr = this.super_run(cmd);

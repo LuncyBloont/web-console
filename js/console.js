@@ -27,8 +27,8 @@ class ConsoleForUser {
         // Override{
         this.help_string = "help\n  JS Console\n  By LuncyBloont\n  Undefined running\n\
 basic command:\n\
-  clear        clean the console.\n\
-  help         show help doc.\n";
+  clear        \tclean the console.\n\
+  help         \tshow help doc.\n";
         // }
 
         this.K_BACKSPACE = 8;
@@ -68,7 +68,7 @@ basic command:\n\
         window.cmcmcmc_blink = true;
         switch (code) {
             case this.K_TAB:
-                this.help();
+                this.print(this.help());
                 break;
 
             case this.K_ENTER:
