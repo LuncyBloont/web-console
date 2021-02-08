@@ -27,11 +27,14 @@ document.body.onkeyup = function() {
 };
 
 document.getElementById("tx").ontouchstart = function() {
-    this.onkeypress = function() {
-        var a = this.value;
-        this.value = "";
-        cmd.get_in(a);
-    };
+    if (!window.OnKey) {
+        window.OnKey = function() {
+            var a = document.getElementById("tx").value;
+            document.getElementById("tx").value = "";
+            cmd.get_in(a);
+        };
+        setInterval(window.OnKey, 30);
+    }    
     // document.body.onkeydown = function() {}
     // document.body.onkeyup = function() {}
 };

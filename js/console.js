@@ -136,7 +136,10 @@ basic command:\n\
     }
 
     get_in(s) {
-        
+        var chr = s;
+        this.editing = this.editing.substring(0, this.cursor) + chr
+            + this.editing.substring(this.cursor, this.editing.length);
+        this.cursor += 1;
     }
 
     print(s, noendl) {
