@@ -139,7 +139,7 @@ basic command:\n\
         var chr = s;
         this.editing = this.editing.substring(0, this.cursor) + chr
             + this.editing.substring(this.cursor, this.editing.length);
-        this.cursor += 1;
+        this.cursor += chr.length;
     }
 
     print(s, noendl) {

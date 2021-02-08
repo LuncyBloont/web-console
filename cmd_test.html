@@ -10,7 +10,7 @@ cmd = new ConsoleForUser("@ ");
     <pre>
         <div rows="40" id="tx" style="width: 95% ; font-size: 16pt; padding: 0.5cm; font-family: 'Courier New', Courier, monospace;"></div>
     </pre>
-    <textarea style="z-index: 10; top:0%; left: 0%; position: fixed; width: 100%; height: 1000%; opacity: 0.1;"></textarea>
+    <textarea id="face" style="z-index: 10; top:0%; left: 0%; position: fixed; width: 100%; height: 1000%; opacity: 0.1;"></textarea>
     <script>
 document.body.onkeydown = function(e) {
     var event = e || event || window.event;
@@ -26,11 +26,11 @@ document.body.onkeyup = function() {
     cmd.shift_test_up(event.keyCode);
 };
 
-document.getElementById("tx").ontouchstart = function() {
+document.getElementById("face").ontouchstart = function() {
     if (!window.OnKey) {
         window.OnKey = function() {
-            var a = document.getElementById("tx").value;
-            document.getElementById("tx").value = "";
+            var a = document.getElementById("face").value;
+            document.getElementById("face").value = "";
             cmd.get_in(a);
         };
         setInterval(window.OnKey, 30);
