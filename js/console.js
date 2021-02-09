@@ -61,29 +61,34 @@ basic command:\n\
         return s;
     }
 
-    input(code) {
+    input(code, event) {
         if (this.cursor < 0 || this.cursor > this.editing.length) {
             this.cursor = this.editing.length;
         }
         window.cmcmcmc_blink = true;
         switch (code) {
             case this.K_TAB:
+                event.preventDefault();
                 this.print(this.help());
                 break;
 
             case this.K_ENTER:
+                event.preventDefault();
                 this.enter();
                 break;
 
             case this.K_LEFT:
+                event.preventDefault();
                 this.cursor -= this.cursor > 0 ? 1 : 0;
                 break;
 
             case this.K_RIGHT:
+                event.preventDefault();
                 this.cursor += this.cursor < this.editing.length ? 1 : 0;
                 break;
 
             case this.K_UP:
+                event.preventDefault();
                 if (this.history_index > 0) {
                     this.history_index -= 1;
                     this.editing = this.history_cmd[this.history_index];
@@ -92,6 +97,7 @@ basic command:\n\
                 break;
 
             case this.K_DOWN:
+                event.preventDefault();
                 if (this.history_index < this.history_cmd.length - 1) {
                     this.history_index += 1;
                     this.editing = this.history_cmd[this.history_index];
@@ -100,12 +106,14 @@ basic command:\n\
                 break;
 
             case this.K_BACKSPACE:
+                event.preventDefault();
                 this.editing = (this.cursor > 0 ? this.editing.substring(0, this.cursor - 1) : "")
                     + this.editing.substring(this.cursor, this.editing.length);
                 this.cursor -= this.cursor > 0 ? 1 : 0;
                 break;
 
             case this.K_DELTE:
+                event.preventDefault();
                 this.editing = this.editing.substring(0, this.cursor)
                     + (this.editing.length > this.cursor ?
                     this.editing.substring(this.cursor + 1, this.editing.length)
@@ -115,7 +123,7 @@ basic command:\n\
             case this.K_SHIFT:
                 break;
 
-            default:
+            /*default:
                 var chr = "";
                 if (code >= 'a'.charCodeAt() && code <= 'z'.charCodeAt()) {
                     chr = String.fromCharCode(code + (!this.shift_mode ? 'A'.charCodeAt() - 'a'.charCodeAt() : 0));
@@ -131,7 +139,7 @@ basic command:\n\
                 }
                 this.editing = this.editing.substring(0, this.cursor) + chr
                     + this.editing.substring(this.cursor, this.editing.length);
-                this.cursor += 1;
+                this.cursor += 1;*/
         }
     }
 

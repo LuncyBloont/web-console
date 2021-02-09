@@ -14,19 +14,19 @@ cmd = new ConsoleForUser("@ ");
     <script>
 document.body.onkeydown = function(e) {
     var event = e || event || window.event;
-    event.preventDefault();
-    event.returnValue = false;
-    cmd.input(event.keyCode);
-    cmd.shift_test_down(event.keyCode);
+    // event.preventDefault();
+    // event.returnValue = false;
+    cmd.input(event.keyCode, event);
+    // cmd.shift_test_down(event.keyCode);
 };
 
 document.body.onkeyup = function() {
-    event.preventDefault();
-    event.returnValue = false;
-    cmd.shift_test_up(event.keyCode);
+    // event.preventDefault();
+    // event.returnValue = false;
+    // cmd.shift_test_up(event.keyCode);
 };
 
-document.getElementById("face").ontouchstart = function() {
+document.getElementById("face").onkeydown = function() {
     if (!window.OnKey) {
         window.OnKey = function() {
             var a = document.getElementById("face").value;
