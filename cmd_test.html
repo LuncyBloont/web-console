@@ -44,60 +44,30 @@ cmd.help_string += "\nDemo help:\n\
   run \"[code]\"               \trun js code in this page.\n\
   alert \"<string>\"           \talert message use browser alert components.\n\
   help                         \tshow help doc.\n";
-cmd.super_run = cmd.run;
-cmd.run = function(cmd) {
-    var sr = this.super_run(cmd);
-    var cmds = (cmd + "").split(" ");
-    if (cmds[0] == "echo") {
-        var s = cmd.substring(cmd.indexOf("echo") + 5, cmd.length);
-        try {
-            if (s.indexOf("\"") < 0) {
-                var a = undefined;
-                a.replace();
-            }
-            s = eval(s);
-        } catch {
-            this.print(this.getString("string should be included by \"\" ..."));
-            return "(x)"
-        }
-        s = this.getString(s);
-        this.print(s, true);
-        return "(OK)";
+
+bin.echo = function(cf, cmds) {
+    for (var i = 1; i < cmds.length; i++) {
+        cf.print(cmds[i] + "", true);
     }
-    if (cmds[0] == "run") {
-        var s = cmd.substring(cmd.indexOf("run") + 4, cmd.length);
-        try {
-            if (s.indexOf("\"") < 0) {
-                var a = undefined;
-                a.replace();
-            }
-            s = eval(s);
-            s = eval(s);
-        } catch {
-            this.print(this.getString("code should be included by \"\" ..."));
-            return "(x)";
-        }
-        s = this.getString(s) + this.endl;
-        this.print(s);
-        return "(OK)";
-    }
-    if (cmds[0] == "alert") {
-        var s = cmd.substring(cmd.indexOf("alert") + 6, cmd.length);
-        try {
-            if (s.indexOf("\"") < 0) {
-                var a = undefined;
-                a.replace();
-            }
-            s = eval(s);
-            alert(s);
-        } catch {
-            this.print(this.getString("string should be included by \"\" ..."));
-            return "(x)";
-        }
-        return "(OK)";
-    }
-    return sr == true ? true : "(?)";
+    return true;
 };
+bin.run = function(cf, cmds) {
+    for (var i = 1; i < cmds.length; i++) {
+        try {
+            cf.print(eval(cmds[i]) || "[Empty returned]");
+        } catch (e) {
+            cf.print(e.toString() + " /At/ " + cmds[i]);
+            return "(x)";
+        }
+    }
+    return true;
+};
+bin.alert = function(cf, cmds) {
+    for (var i = 1; i < cmds.length; i++) {
+        alert(cmds[i]);
+    }
+    return true;
+}
 
 function update() {
     document.getElementById("tx").innerHTML = cmd.toShow();

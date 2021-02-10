@@ -1,3 +1,17 @@
+var bin = new Object();
+bin.help = function(cf) {
+    cf.print(cf.help());
+    return true;
+};
+bin.clear = function(cf) {
+    cf.history = "";
+    return true;
+};
+bin.exit = function(cf) {
+    cf.print("web page cant quit...");
+    return true;
+};
+
 class ConsoleForUser {
     constructor(ps1, endl, space, blink) {
         /*
@@ -55,9 +69,7 @@ basic command:\n\
 
     help() {
         var s = this.help_string;
-        
         s = this.getString(s) + this.endl;
-        
         return s;
     }
 
@@ -154,24 +166,57 @@ basic command:\n\
         this.history += s + (noendl ? "" : this.endl);
     }
 
-    // Override {
     run(cmd) {
-        cmd = (cmd + "").split(" ");
-        if (cmd[0] == "help") {
-            this.print(this.help());
-            return true;
-        }
-        if (cmd[0] == "exit") {
-            this.print("web page cant quit...");
-            return true;
-        }
-        if (cmd[0] == "clear") {
-            this.history = "";
-            return true;
+        cmd = this.analyse(cmd);
+        if (bin[cmd[0]]) {
+            var f = bin[cmd[0]];
+            return f(this, cmd);
         }
         return "(?)";
     }
-    // }
+
+    analyse(cmd) {
+        cmd = cmd + "";
+        var parts = [];
+        var s = "";
+        var p = '\"';
+        for (var i = 0; i < cmd.length; i++) {
+            var chr = cmd.charAt(i);
+            switch (chr) {
+                case '\\':
+                    i += 1;
+                    s += i < cmd.length ? cmd.charAt(i) : "";
+                    break;
+                case ' ':
+                case '\t':
+                    if (s != "") {
+                        parts[parts.length] = s;
+                        s = "";
+                    }
+                    break;
+                case '\"':
+                case '\'':
+                    p = chr;
+                    i += 1
+                    while (i < cmd.length && cmd.charAt(i) != p) {
+                        if (cmd.charAt(i) == '\\') {
+                            var trs = cmd.charAt(i) + (i + 1 < cmd.length ? cmd.charAt(i + 1) : "");
+                            trs = eval("\"" + trs + "\"");
+                            i += 1;
+                            s += trs;
+                        } else {
+                            s += cmd.charAt(i);
+                        }
+                        i++;
+                    }
+                    break;
+                default:
+                    s += chr;
+            }
+        }
+        if (s != "") { parts[parts.length] = s; }
+        return parts;
+    }
 
     getString(s) {
         s = s || "";
@@ -196,7 +241,7 @@ basic command:\n\
         this.history += this.ps1 + this.editing + this.endl;
         var result = this.run(this.editing);
         if (result == true || !runable) {
-            this.out("");
+            this.out(runable ? "(OK)" : "");
         } else {
             this.out(result);
         }
