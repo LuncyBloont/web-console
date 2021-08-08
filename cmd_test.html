@@ -3,7 +3,10 @@
 <head>
     <script src="js/console.js"></script>
     <script>
-cmd = new ConsoleForUser("@ ");
+	cmdkeydwon = function() {
+		setTimeout("document.getElementById(\"tx\").scrollIntoView(false);", 100);
+	}
+	cmd = new ConsoleForUser(cmdkeydwon, "@ ");
     </script>
 </head>
 <body>
@@ -24,6 +27,7 @@ document.body.onkeyup = function() {
     // event.preventDefault();
     // event.returnValue = false;
     // cmd.shift_test_up(event.keyCode);
+	
 };
 
 document.getElementById("face").onkeydown = function() {
@@ -35,7 +39,7 @@ document.getElementById("face").onkeydown = function() {
         };
         setInterval(window.OnKey, 30);
     }
-    document.getElementById("tx").scrollIntoView(false);
+    
     // document.body.onkeydown = function() {}
     // document.body.onkeyup = function() {}
 };

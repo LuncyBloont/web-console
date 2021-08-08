@@ -13,7 +13,7 @@ bin.exit = function(cf) {
 };
 
 class ConsoleForUser {
-    constructor(ps1, endl, space, blink) {
+    constructor(keyFunc, ps1, endl, space, blink) {
         /*
         ps1: the shell's variable PS1, show at the start of the line user inputting.
         endl: the line break string. '\n' for textarea; '<br />' for div.
@@ -37,6 +37,7 @@ class ConsoleForUser {
         this.cursor = 0; // the cursor position.
         this.cursor_char = '_';
         this.shift_mode = false; // is shift down
+		this.keyFunc = keyFunc;
 
         // Override{
         this.help_string = "help\n  JS Console\n  By LuncyBloont\n  Undefined running\n\
@@ -82,21 +83,25 @@ basic command:\n\
             case this.K_TAB:
                 event.preventDefault();
                 this.print(this.help());
+				this.keyFunc();
                 break;
 
             case this.K_ENTER:
                 event.preventDefault();
                 this.enter();
+				this.keyFunc();
                 break;
 
             case this.K_LEFT:
                 event.preventDefault();
                 this.cursor -= this.cursor > 0 ? 1 : 0;
+				this.keyFunc();
                 break;
 
             case this.K_RIGHT:
                 event.preventDefault();
                 this.cursor += this.cursor < this.editing.length ? 1 : 0;
+				this.keyFunc();
                 break;
 
             case this.K_UP:
@@ -106,6 +111,7 @@ basic command:\n\
                     this.editing = this.history_cmd[this.history_index];
                     this.cursor = this.editing.length;
                 }
+				this.keyFunc();
                 break;
 
             case this.K_DOWN:
@@ -115,6 +121,7 @@ basic command:\n\
                     this.editing = this.history_cmd[this.history_index];
                     this.cursor = this.editing.length;
                 }
+				this.keyFunc();
                 break;
 
             case this.K_BACKSPACE:
@@ -122,6 +129,7 @@ basic command:\n\
                 this.editing = (this.cursor > 0 ? this.editing.substring(0, this.cursor - 1) : "")
                     + this.editing.substring(this.cursor, this.editing.length);
                 this.cursor -= this.cursor > 0 ? 1 : 0;
+				this.keyFunc();
                 break;
 
             case this.K_DELTE:
@@ -130,6 +138,7 @@ basic command:\n\
                     + (this.editing.length > this.cursor ?
                     this.editing.substring(this.cursor + 1, this.editing.length)
                     : "");
+				this.keyFunc();
                 break;
             
             case this.K_SHIFT:
@@ -153,6 +162,7 @@ basic command:\n\
                     + this.editing.substring(this.cursor, this.editing.length);
                 this.cursor += 1;*/
         }
+		
     }
 
     get_in(s) {
@@ -160,6 +170,7 @@ basic command:\n\
         this.editing = this.editing.substring(0, this.cursor) + chr
             + this.editing.substring(this.cursor, this.editing.length);
         this.cursor += chr.length;
+		if (chr != '') this.keyFunc();
     }
 
     print(s, noendl) {
