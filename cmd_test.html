@@ -34,7 +34,8 @@ document.getElementById("face").onkeydown = function() {
             cmd.get_in(a);
         };
         setInterval(window.OnKey, 30);
-    }    
+    }
+    document.getElementById("tx").scrollIntoView(false);
     // document.body.onkeydown = function() {}
     // document.body.onkeyup = function() {}
 };
@@ -71,7 +72,6 @@ bin.alert = function(cf, cmds) {
 
 function update() {
     document.getElementById("tx").innerHTML = cmd.toShow();
-    document.getElementById("tx").scrollIntoView(false);
 }
 
 setInterval(update, 10);
